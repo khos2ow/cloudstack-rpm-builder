@@ -3,6 +3,17 @@ Docker images for building Apache CloudStack RPM packages.
 
 This will give portable, immutable and reproducable mechanism to build packages for releases. A very good candidate to be used by the Jenkins slaves of the project.
 
+# Table of Contents
+
+- [Supported tags and respective Dockerfile links](https://github.com/khos2ow/cloudstack-rpm-builder#supported-tags-and-respective-dockerfile-links)
+- [Packges installed in Conatiner](https://github.com/khos2ow/cloudstack-rpm-builder#packges-installed-in-conatiner)
+- [Building packages](https://github.com/khos2ow/cloudstack-rpm-builder#building-packages)
+  - [Clone Apache CloudStack source code](https://github.com/khos2ow/cloudstack-rpm-builder#clone-apache-cloudstack-source-code)
+  - [Pull Docker Images](https://github.com/khos2ow/cloudstack-rpm-builder#pull-docker-images)
+  - [Build Packages](https://github.com/khos2ow/cloudstack-rpm-builder#build-packages)
+  - [Maven Cache](https://github.com/khos2ow/cloudstack-rpm-builder#maven-cache)
+- [Build Help](https://github.com/khos2ow/cloudstack-rpm-builder#build-help)
+
 # Supported tags and respective Dockerfile links
 - [`latest`, `centos7` (centos7/Dockerfile)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile)
 - [`centos6` (centos6/Dockerfile)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos6/Dockerfile)
@@ -56,7 +67,7 @@ You can provide Maven cache folder (`~/.m2`) as a volume to the container to mak
 
     docker run -v /tmp:/mnt/build -v ~/.m2:/root/.m2 khos2ow/cloudstack-rpm-builder:centos7 --distribution centos7 [ARGS...]
 
-## Build Help
+# Build Help
 To see all the available options you can pass to `docker run ...` command:
 
     docker run -v /tmp:/mnt/build khos2ow/cloudstack-rpm-builder:centos7 --help
