@@ -16,6 +16,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+set -e
+
 # Adjust user and group provided by host
 adjust_owner() {
     # if both set then change the owner
@@ -36,15 +38,17 @@ if [ ! -f "/mnt/build/cloudstack/packaging/package.sh" ]; then
     exit 1
 fi
 
-# do the packaging
-bash -x /mnt/build/cloudstack/packaging/package.sh $@
+{
+    # do the packaging
+    bash -x /mnt/build/cloudstack/packaging/package.sh $@ && {
+        # create RPMs
+        createrepo /mnt/build/cloudstack/dist/rpmbuild/RPMS
+        adjust_owner
+    }
+} || {
+    status=$?
 
-if [ $? -eq 0 ]; then
-    # create RPMs
-    createrepo /mnt/build/cloudstack/dist/rpmbuild/RPMS
-    adjust_owner
-else
     adjust_owner
     echo "Packaging RPM failed"
-    exit $?
-fi
+    exit $status
+}
