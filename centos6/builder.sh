@@ -16,8 +16,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-set -e
-
 # Adjust user and group provided by host
 adjust_owner() {
     # if both set then change the owner
@@ -48,5 +46,5 @@ if [ $? -eq 0 ]; then
 else
     adjust_owner
     echo "Packaging RPM failed"
-    exit 1
+    exit $?
 fi
