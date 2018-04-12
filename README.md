@@ -6,16 +6,16 @@ This will give portable, immutable and reproducable mechanism to build packages 
 
 ## Table of Contents
 
-- [Supported tags and respective `Dockerfile` links](https://github.com/khos2ow/cloudstack-rpm-builder#supported-tags-and-respective-dockerfile-links)
-- [Packges installed in conatiner](https://github.com/khos2ow/cloudstack-rpm-builder#packges-installed-in-conatiner)
-- [Build RPM packages](https://github.com/khos2ow/cloudstack-rpm-builder#build-rpm-packages)
-  - [Clone Apache CloudStack source code](https://github.com/khos2ow/cloudstack-rpm-builder#clone-apache-cloudstack-source-code)
-  - [Pull Docker images](https://github.com/khos2ow/cloudstack-rpm-builder#pull-docker-images)
-  - [Build packages](https://github.com/khos2ow/cloudstack-rpm-builder#build-packages)
+- [Supported tags and respective `Dockerfile` links](#supported-tags-and-respective-dockerfile-links)
+- [Packges installed in conatiner](#packges-installed-in-conatiner)
+- [Build RPM packages](#build-rpm-packages)
+  - [Clone Apache CloudStack source code](#clone-apache-cloudstack-source-code)
+  - [Pull Docker images](#pull-docker-images)
+  - [Build packages](#build-packages)
 - [Building tips](#building-tips)
-  - [Maven cache](https://github.com/khos2ow/cloudstack-rpm-builder#maven-cache)
-  - [Adjust host owner permission](https://github.com/khos2ow/cloudstack-rpm-builder#adjust-host-owner-permission)
-- [Builder help](https://github.com/khos2ow/cloudstack-rpm-builder#builder-help)
+  - [Maven cache](#maven-cache)
+  - [Adjust host owner permission](#adjust-host-owner-permission)
+- [Builder help](#builder-help)
 - [License](#license)
 
 ## Supported tags and respective `Dockerfile` links
