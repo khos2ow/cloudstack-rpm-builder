@@ -16,7 +16,7 @@
 # under the License.
 
 FROM centos:6
-MAINTAINER Khosrow Moossavi <kmoossavi@cloudops.com>
+MAINTAINER Khosrow Moossavi <me@khosrow.io>
 
 RUN \
     yum clean metadata && \
