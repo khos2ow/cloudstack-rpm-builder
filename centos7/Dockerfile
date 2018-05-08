@@ -49,9 +49,8 @@ RUN \
 
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
 
-COPY builder.sh /usr/local/bin/builder.sh
-
 VOLUME /mnt/build
 WORKDIR /mnt/build
 
-ENTRYPOINT ["builder.sh"]
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["docker-entrypoint.sh"]
