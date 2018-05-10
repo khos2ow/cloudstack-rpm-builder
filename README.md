@@ -9,9 +9,12 @@ This will give portable, immutable and reproducable mechanism to build packages 
 - [Supported tags and respective `Dockerfile` links](#supported-tags-and-respective-dockerfile-links)
 - [Packges installed in conatiner](#packges-installed-in-conatiner)
 - [Build RPM packages](#build-rpm-packages)
-  - [Clone Apache CloudStack source code](#clone-apache-cloudstack-source-code)
   - [Pull Docker images](#pull-docker-images)
-  - [Build packages](#build-packages)
+  - [Build local repository](#build-local-repository)
+    - [Clone Apache CloudStack source code](#clone-apache-cloudstack-source-code)
+    - [Build packages of local repository](#build-packages-of-local-repository)
+  - [Build remote repository](#build-remote-repository)
+    - [Build packages of remote repository](#build-packages-of-remote-repository)
 - [Building tips](#building-tips)
   - [Maven cache](#maven-cache)
   - [Adjust host owner permission](#adjust-host-owner-permission)
@@ -43,15 +46,6 @@ List of available packages inside the container:
 
 Building RPM packages with the Docker container is rather easy, a few steps are required:
 
-### Clone Apache CloudStack source code
-
-The first step required is to clone the CloudStack source code somewhere on the filesystem, in `/tmp` for example:
-
-    cd /tmp
-    git clone https://github.com/apache/cloudstack.git cloudstack
-
-Now that you have done so we can continue.
-
 ### Pull Docker images
 
 Let's assume we want to build packages for CentOS 7 on CentOS 7. We pull that image first:
@@ -60,9 +54,21 @@ Let's assume we want to build packages for CentOS 7 on CentOS 7. We pull that im
 
 You can replace `centos7` tag by `centos6` or `latest` if you want.
 
-### Build packages
+### Build local repository
 
-Now that we have the Docker images we can build packages by mapping `/tmp` into `/mnt/build` in the container. (Note that the container always expects the `cloudstack` code exists in `/mnt/build` path.)
+You can clone the CloudStack source code from repository locally on your machine and build packages against that.
+
+#### Clone Apache CloudStack source code
+
+The first step required is to clone the CloudStack source code somewhere on the filesystem, in `/tmp` for example:
+
+    git clone https://github.com/apache/cloudstack.git /tmp/cloudstack
+
+Now that you have done so we can continue.
+
+#### Build packages of local repository
+
+Now that we have cloned the CloudStack source code locally, we can build packages by mapping `/tmp` into `/mnt/build` in the container. (Note that the container always expects the `cloudstack` code exists in `/mnt/build` path.)
 
     docker run \
         -v /tmp:/mnt/build \
@@ -73,6 +79,31 @@ Or if your local cloudstack folder has other name, you need to map it to `/mnt/b
     docker run \
         -v /tmp/cloudstack-custom-name:/mnt/build/cloudstack \
         khos2ow/cloudstack-rpm-builder:centos7 --distribution centos7 [ARGS...]
+
+After the build has finished the *.rpm* packages are available in */tmp/cloudstack/dist/rpmbuild/RPMS* on the host system.
+
+### Build remote repository
+
+Also you can build RPM packages of any remote repository without the need to manually clone it first. You only need to specify git remote and git ref you intend to build from.
+
+#### Build packages of remote repository
+
+Now let's assume we want to build packages of `HEAD` of `master` branch from https://github.com/apache/cloudstack repository, we build packages by mapping `/tmp` into `/mnt/build` in the container. The container will clone the repository (defined by `--git-remote` flag) and check out the REF (defined by `--git-ref` flag) in `/mnt/build/cloudstack` inside the container and can be accessed from `/tmp/cloudstack` from the host machine.
+
+    docker run \
+        -v /tmp:/mnt/build \
+        khos2ow/cloudstack-rpm-builder:centos7 \
+            --git-remote https://github.com/apache/cloudstack.git \
+            --git-ref master \
+            --distribution centos7 [ARGS...]
+
+Note that any valid git Refspec is acceptable, such as:
+
+- `refs/heads/<BRANCH>` to build specified Branch
+- `<BRANCH>` short version of build specified Branch
+- `refs/pull/<NUMBER>/head` to build specified GitHub Pull Request
+- `refs/merge-requests/<NUMBER>/head` to build specified GitLab Merge Request
+- `refs/tags/<NAME>` to build specified Tag
 
 After the build has finished the *.rpm* packages are available in */tmp/cloudstack/dist/rpmbuild/RPMS* on the host system.
 
