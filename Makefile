@@ -17,13 +17,21 @@
 
 .PHONY: all centos6 centos7 latest
 
+# Build docker tag based on provided info
+#
+# $1: tag_name
+# $2: directory_name
+define build_tag
+	docker build -t khos2ow/cloudstack-rpm-builder:$(1) $(2)
+endef
+
 all: centos6 centos7 latest
 
 centos6:
-	docker build -t khos2ow/cloudstack-rpm-builder:centos6 centos6/
+	$(call build_tag,centos6,centos6)
 
 centos7:
-	docker build -t khos2ow/cloudstack-rpm-builder:centos7 centos7/
+	$(call build_tag,centos7,centos7)
 
 latest:
-	docker build -t khos2ow/cloudstack-rpm-builder:latest centos7/
+	$(call build_tag,latest,centos7)
