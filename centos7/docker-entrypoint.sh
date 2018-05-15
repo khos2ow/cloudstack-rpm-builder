@@ -107,6 +107,7 @@ if [ -d "/mnt/build/cloudstack" ]; then
         else
             echo "Removing /mnt/build/cloudstack ..."
             rm -rf /mnt/build/cloudstack
+            echo -e "\n--------\n"
         fi
     fi
 else
@@ -115,6 +116,33 @@ else
         exit 1
     fi
 fi
+
+# Print out some environment information
+echo -e "System information:"
+cat /etc/*-release
+
+echo -e "\nGit version:"
+git --version
+
+echo -e "\nJava version:"
+java -version
+
+echo -e "\nMaven version:"
+mvn --version
+
+echo -e "\nPython version:"
+python --version
+
+echo -e "\ncreaterepo version:"
+createrepo --version
+
+echo -e "\nrpmbuild version:"
+rpmbuild --version
+
+echo -e "\ngenisoimage version:"
+genisoimage --version
+
+echo -e "\n--------\n"
 
 # Clone the remote provided git repo and ref
 if [ $use_remote = true ]; then
@@ -141,6 +169,7 @@ fi
 # convert LONG flags to SHORT flags for anything prior 4.12.x.x
 echo "Detecting CloudStack version ..."
 pom_version=$(cd /mnt/build/cloudstack; mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
+echo "${pom_version}"
 major_version=$(echo ${pom_version} | cut -d. -f1)
 minor_version=$(echo ${pom_version} | cut -d. -f2)
 echo -e "\n--------\n"
