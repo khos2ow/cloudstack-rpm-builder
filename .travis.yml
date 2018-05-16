@@ -23,6 +23,11 @@ language: generic
 services: 
   - docker
 
+cache:
+  directories:
+    - $HOME/.m2
+  timeout: 500
+
 env:
   global:
      - IMAGE="khos2ow/cloudstack-rpm-builder"
@@ -32,10 +37,15 @@ env:
     - TAG="latest"  PARAMS="--distribution centos7"
 
 install: make ${TAG}
-before_script: mkdir -p ${TRAVIS_BUILD_DIR}/tmp
+
+before_script: 
+  - mkdir -p ${TRAVIS_BUILD_DIR}/tmp
+  - mkdir -p $HOME/.m2
+
 script: |
   docker run \
     --volume ${TRAVIS_BUILD_DIR}/tmp:/mnt/build \
+    --volume $HOME/.m2:/root/.m2 \
     --rm \
     ${IMAGE}:${TAG} \
       --git-remote https://github.com/apache/cloudstack.git \
