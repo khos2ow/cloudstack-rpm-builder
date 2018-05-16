@@ -28,9 +28,12 @@ cache:
     - $HOME/.m2
   timeout: 500
 
+notifications:
+  email: false
+
 env:
   global:
-     - IMAGE="khos2ow/cloudstack-rpm-builder"
+    - IMAGE="khos2ow/cloudstack-rpm-builder"
   matrix:
     - TAG="centos6" PARAMS="--distribution centos63"
     - TAG="centos7" PARAMS="--distribution centos7"
