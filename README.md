@@ -1,5 +1,10 @@
 # CloudStack RPM Package builder using Docker
 
+[![Build Status](https://travis-ci.com/khos2ow/cloudstack-rpm-builder.svg?branch=master)](https://travis-ci.com/khos2ow/cloudstack-rpm-builder)
+![Docker Automated build](https://img.shields.io/docker/automated/khos2ow/cloudstack-rpm-builder.svg)
+![Docker Build Status](https://img.shields.io/docker/build/khos2ow/cloudstack-rpm-builder.svg)
+![license](https://img.shields.io/github/license/khos2ow/cloudstack-rpm-builder.svg)
+
 Docker images for building Apache CloudStack RPM packages.
 
 This will give portable, immutable and reproducable mechanism to build packages for releases. A very good candidate to be used by the Jenkins slaves of the project.
