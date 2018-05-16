@@ -1,9 +1,9 @@
 # CloudStack RPM Package builder using Docker
 
 [![Build Status](https://travis-ci.com/khos2ow/cloudstack-rpm-builder.svg?branch=master)](https://travis-ci.com/khos2ow/cloudstack-rpm-builder)
-![Docker Automated build](https://img.shields.io/docker/automated/khos2ow/cloudstack-rpm-builder.svg)
-![Docker Build Status](https://img.shields.io/docker/build/khos2ow/cloudstack-rpm-builder.svg)
-![license](https://img.shields.io/github/license/khos2ow/cloudstack-rpm-builder.svg)
+[![Docker Automated build](https://img.shields.io/docker/automated/khos2ow/cloudstack-rpm-builder.svg)](hub.docker.com/r/khos2ow/cloudstack-rpm-builder/)
+[![Docker Build Status](https://img.shields.io/docker/build/khos2ow/cloudstack-rpm-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-rpm-builder/builds/)
+[![license](https://img.shields.io/github/license/khos2ow/cloudstack-rpm-builder.svg)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/LICENSE)
 
 Docker images for building Apache CloudStack RPM packages.
 
