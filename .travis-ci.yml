@@ -30,6 +30,10 @@ env:
     - TAG="centos7" PARAMS="--distribution centos7"
     - TAG="latest"  PARAMS="--distribution centos7"
 
+branches:
+  except:
+    - master
+
 install: make ${TAG}
 script: |
   docker run \
