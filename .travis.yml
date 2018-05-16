@@ -32,9 +32,10 @@ env:
     - TAG="latest"  PARAMS="--distribution centos7"
 
 install: make ${TAG}
+before_script: mkdir -p ${TRAVIS_BUILD_DIR}/tmp
 script: |
   docker run \
-    --volume ${TRAVIS_BUILD_DIR}:/mnt/build/cloudstack \
+    --volume ${TRAVIS_BUILD_DIR}/tmp:/mnt/build \
     --rm \
     ${IMAGE}:${TAG} \
       --git-remote https://github.com/apache/cloudstack.git \
