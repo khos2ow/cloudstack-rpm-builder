@@ -136,31 +136,7 @@ else
 fi
 
 # Print out some environment information
-echo -e "System information:"
-cat /etc/*-release
-
-echo -e "\nGit version:"
-git --version
-
-echo -e "\nJava version:"
-java -version
-
-echo -e "\nMaven version:"
-mvn --version
-
-echo -e "\nPython version:"
-python --version
-
-echo -e "\ncreaterepo version:"
-createrepo --version
-
-echo -e "\nrpmbuild version:"
-rpmbuild --version
-
-echo -e "\ngenisoimage version:"
-genisoimage --version
-
-echo -e "\n--------\n"
+environment-info.sh
 
 # Clone the remote provided git repo and ref
 if [ $use_remote = true ]; then
