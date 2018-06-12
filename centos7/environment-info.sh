@@ -18,28 +18,42 @@
 
 set -e
 
-echo -e "System information:"
+EXTRA_LINE=""
+
+print_title() {
+    local version_label=""
+    if [[ "$1" = *":" ]]; then
+        version_label=""
+    else
+        version_label=" version:"
+    fi
+    echo -e "${EXTRA_LINE}\e[1;34m$1${version_label}\e[0m"
+}
+
+print_title "system information:"
 cat /etc/*-release
 
-echo -e "\nGit version:"
+EXTRA_LINE="\n"
+
+print_title "git"
 git --version
 
-echo -e "\nJava version:"
+print_title "java"
 java -version
 
-echo -e "\nMaven version:"
+print_title "maven"
 mvn --version
 
-echo -e "\nPython version:"
+print_title "python"
 python --version
 
-echo -e "\ncreaterepo version:"
+print_title "createrepo"
 createrepo --version
 
-echo -e "\nrpmbuild version:"
+print_title "rpmbuild"
 rpmbuild --version
 
-echo -e "\ngenisoimage version:"
+print_title "genisoimage"
 genisoimage --version
 
-echo -e "\n--------\n"
+echo ""
