@@ -32,7 +32,6 @@ RUN \
         createrepo \
         mkisofs \
         git \
-        maven \
         java-1.8.0-openjdk-devel \
         tomcat \
         python-argparse \
@@ -43,11 +42,18 @@ RUN \
         gcc \
         gcc-c++ \
         jq \
+        wget \
         ws-commons-util && \
     yum upgrade python-setuptools && \
     yum clean all && rm -rf /var/cache/yum
 
-ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0
+
+# maven
+RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo && \
+    yum clean metadata && \
+    yum install -y \
+        apache-maven
 
 VOLUME /mnt/build
 WORKDIR /mnt/build
