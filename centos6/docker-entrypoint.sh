@@ -123,7 +123,7 @@ if [ -d "${workspace_path}" ]; then
             echo "Error: Could not clone remote git repository, '${workspace_path}' exists"
             exit 1
         else
-            echo -e "\e[0;32mRemoving ${workspace_path} ...\e[0m"
+            echo -e "\e[0;32mremoving ${workspace_path} ...\e[0m"
             rm -rf ${workspace_path}
             echo ""
         fi
