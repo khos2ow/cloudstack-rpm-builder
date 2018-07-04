@@ -49,7 +49,8 @@ RUN \
     yum clean metadata && \
     yum install -y \
         apache-maven && \
-    yum clean all && rm -rf /var/cache/yum
+    yum clean all && rm -rf /var/cache/yum && \
+    sed -i "s/%dist .el7$/%dist .el7.centos/g" /etc/rpm/macros.dist
 
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0
 
