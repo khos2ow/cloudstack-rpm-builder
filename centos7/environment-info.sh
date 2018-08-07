@@ -41,6 +41,9 @@ git --version
 print_title "java"
 java -version
 
+print_title "tomcat"
+tomcat version
+
 print_title "maven"
 mvn --version
 
