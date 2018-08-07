@@ -33,7 +33,7 @@ RUN \
         mkisofs \
         git \
         java-1.8.0-openjdk-devel \
-        tomcat \
+        tomcat6 \
         python-argparse \
         python-yaml \
         python-pip \
@@ -53,6 +53,7 @@ RUN \
     sed -i "s/%dist .el7$/%dist .el7.centos/g" /etc/rpm/macros.dist
 
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0
+ENV CATALINA_HOME=/usr/share/tomcat6/
 
 VOLUME /mnt/build
 WORKDIR /mnt/build
