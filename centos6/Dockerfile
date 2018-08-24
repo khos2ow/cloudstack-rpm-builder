@@ -34,18 +34,36 @@ RUN \
         git \
         java-1.8.0-openjdk-devel \
         tomcat6 \
-        python-argparse \
-        python-yaml \
-        python-pip \
-        python-wheel \
-        mysql-connector-python \
+        centos-release-scl \
         gcc \
         gcc-c++ \
         jq \
         wget \
-        ws-commons-util && \
-    yum upgrade python-setuptools && \
-    wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo && \
+        ws-commons-util \
+        zlib-devel \
+        bzip2-devel \
+        openssl-devel \
+        ncurses-devel \
+        sqlite-devel \
+        readline-devel \
+        tk-devel \
+        gdbm-devel \
+        db4-devel \
+        libpcap-devel \
+        xz-devel \
+        expat-devel
+
+RUN wget --no-check-certificate http://python.org/ftp/python/2.7.14/Python-2.7.14.tar.xz && \
+    tar xf Python-2.7.14.tar.xz && \
+    cd Python-2.7.14 && \
+    ./configure --prefix=/usr/local && \
+    make && make altinstall && \
+    wget https://bootstrap.pypa.io/get-pip.py && \
+    python2.7 get-pip.py && \
+    yum upgrade python-setuptools && \ 
+    yum install -y mysql-connector-python
+
+RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo && \
     yum clean metadata && \
     yum install -y \
         apache-maven && \
