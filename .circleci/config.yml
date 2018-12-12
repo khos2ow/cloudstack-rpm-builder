@@ -35,7 +35,7 @@ jobs:
           --volume /tmp/cloudstack-rpm-builder:/mnt/build \
           --volume /tmp/.m2:/root/.m2 \
           --rm \
-          khos2ow/cloudstack-rpm-builder:centos6 \
+          khos2ow/cloudstack-rpm-builder:centos7 \
             --git-remote https://github.com/apache/cloudstack.git \
             --git-ref refs/heads/master \
             --remove-first \
@@ -53,7 +53,7 @@ jobs:
           --volume /tmp/cloudstack-rpm-builder:/mnt/build \
           --volume /tmp/.m2:/root/.m2 \
           --rm \
-          khos2ow/cloudstack-rpm-builder:centos6 \
+          khos2ow/cloudstack-rpm-builder:latest \
             --git-remote https://github.com/apache/cloudstack.git \
             --git-ref refs/heads/master \
             --remove-first \
