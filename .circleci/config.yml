@@ -1,0 +1,77 @@
+defaults: &defaults
+  machine:
+    services:
+      - docker
+commons: &commons
+  - checkout
+  - run: mkdir -p /tmp/cloudstack-rpm-builder
+  - run: mkdir -p /tmp/.m2
+
+version: 2
+jobs:
+  centos6:
+    <<: *defaults
+    steps:
+      <<: *commons
+    - run: make centos6
+    - run: |
+        docker run \
+          --volume /tmp/cloudstack-rpm-builder:/mnt/build \
+          --volume /tmp/.m2:/root/.m2 \
+          --rm \
+          khos2ow/cloudstack-rpm-builder:centos6 \
+            --git-remote https://github.com/apache/cloudstack.git \
+            --git-ref refs/heads/master \
+            --remove-first \
+            --distribution centos63
+
+  centos7:
+    <<: *defaults
+    steps:
+      <<: *commons
+    - run: make centos7
+    - run: |
+        docker run \
+          --volume /tmp/cloudstack-rpm-builder:/mnt/build \
+          --volume /tmp/.m2:/root/.m2 \
+          --rm \
+          khos2ow/cloudstack-rpm-builder:centos6 \
+            --git-remote https://github.com/apache/cloudstack.git \
+            --git-ref refs/heads/master \
+            --remove-first \
+            --distribution centos7
+
+  latest:
+    <<: *defaults
+    steps:
+      <<: *commons
+    - run: make latest
+    - run: |
+        docker run \
+          --volume /tmp/cloudstack-rpm-builder:/mnt/build \
+          --volume /tmp/.m2:/root/.m2 \
+          --rm \
+          khos2ow/cloudstack-rpm-builder:centos6 \
+            --git-remote https://github.com/apache/cloudstack.git \
+            --git-ref refs/heads/master \
+            --remove-first \
+            --distribution centos7
+
+workflows:
+  version: 2
+  build:
+    jobs:
+    - centos6:
+        filters:
+          tags:
+            only: /v.*/
+
+    - centos7:
+        filters:
+          tags:
+            only: /v.*/
+
+    - latest:
+        filters:
+          tags:
+            only: /v.*/
