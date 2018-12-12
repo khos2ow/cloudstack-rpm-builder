@@ -2,17 +2,15 @@ defaults: &defaults
   machine:
     services:
       - docker
-commons: &commons
-  - checkout
-  - run: mkdir -p /tmp/cloudstack-rpm-builder
-  - run: mkdir -p /tmp/.m2
 
 version: 2
 jobs:
   centos6:
     <<: *defaults
     steps:
-      <<: *commons
+    - checkout
+    - run: mkdir -p /tmp/cloudstack-rpm-builder
+    - run: mkdir -p /tmp/.m2
     - run: make centos6
     - run: |
         docker run \
@@ -28,7 +26,9 @@ jobs:
   centos7:
     <<: *defaults
     steps:
-      <<: *commons
+    - checkout
+    - run: mkdir -p /tmp/cloudstack-rpm-builder
+    - run: mkdir -p /tmp/.m2
     - run: make centos7
     - run: |
         docker run \
@@ -44,7 +44,9 @@ jobs:
   latest:
     <<: *defaults
     steps:
-      <<: *commons
+    - checkout
+    - run: mkdir -p /tmp/cloudstack-rpm-builder
+    - run: mkdir -p /tmp/.m2
     - run: make latest
     - run: |
         docker run \
