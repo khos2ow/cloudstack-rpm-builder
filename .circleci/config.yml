@@ -4,21 +4,28 @@ defaults: &defaults
       - docker
   steps:
   - checkout
-  - run: mkdir -p /tmp/apache-cloudstack
-  - run: mkdir -p /tmp/.m2
+  - run:
+      name: "Setup required directories"
+      command: |
+        mkdir -p /tmp/apache-cloudstack
+        mkdir -p /tmp/.m2
   - restore_cache:
       key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
-  - run: make ${TAG}
-  - run: |
-      docker run \
-        --volume /tmp/apache-cloudstack:/mnt/build \
-        --volume /tmp/.m2:/root/.m2 \
-        --rm \
-        ${IMAGE}:${TAG} \
-          --git-remote https://github.com/apache/cloudstack.git \
-          --git-ref refs/heads/master \
-          --remove-first \
-          ${PARAMS}
+  - run:
+      name: "Build Docker image"
+      command: make ${TAG}
+  - run:
+      name: "Test Docker image"
+      command: |
+        docker run \
+          --volume /tmp/apache-cloudstack:/mnt/build \
+          --volume /tmp/.m2:/root/.m2 \
+          --rm \
+          ${IMAGE}:${TAG} \
+            --git-remote https://github.com/apache/cloudstack.git \
+            --git-ref refs/heads/master \
+            --remove-first \
+            ${PARAMS}
   - save_cache:
       key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
       paths:
