@@ -1,0 +1,74 @@
+defaults: &defaults
+  machine:
+    services:
+      - docker
+  steps:
+  - checkout
+  - run:
+      name: "Setup required directories"
+      command: |
+        mkdir -p /tmp/apache-cloudstack
+        mkdir -p /tmp/.m2
+  - restore_cache:
+      key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
+  - run:
+      name: "Build Docker image"
+      command: make ${TAG}
+  - run:
+      name: "Test Docker image"
+      command: |
+        docker run \
+          --volume /tmp/apache-cloudstack:/mnt/build \
+          --volume /tmp/.m2:/root/.m2 \
+          --rm \
+          ${IMAGE}:${TAG} \
+            --git-remote https://github.com/apache/cloudstack.git \
+            --git-ref refs/heads/master \
+            --remove-first \
+            ${PARAMS}
+  - save_cache:
+      key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
+      paths:
+        - /tmp/.m2
+
+version: 2
+jobs:
+  centos6:
+    <<: *defaults
+    environment:
+      IMAGE: khos2ow/cloudstack-rpm-builder
+      TAG: centos6
+      PARAMS: --distribution centos63
+
+  centos7:
+    <<: *defaults
+    environment:
+      IMAGE: khos2ow/cloudstack-rpm-builder
+      TAG: centos7
+      PARAMS: --distribution centos7
+
+  latest:
+    <<: *defaults
+    environment:
+      IMAGE: khos2ow/cloudstack-rpm-builder
+      TAG: centos7
+      PARAMS: --distribution centos7
+
+workflows:
+  version: 2
+  build:
+    jobs:
+    - centos6:
+        filters:
+          tags:
+            only: /v.*/
+
+    - centos7:
+        filters:
+          tags:
+            only: /v.*/
+
+    - latest:
+        filters:
+          tags:
+            only: /v.*/
