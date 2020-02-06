@@ -50,9 +50,6 @@ mvn --version
 print_title "python"
 python --version
 
-print_title "python3"
-python3 --version
-
 print_title "createrepo"
 createrepo --version
 

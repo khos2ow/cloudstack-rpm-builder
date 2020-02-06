@@ -34,7 +34,7 @@ RUN \
         git \
         java-1.8.0-openjdk-devel \
         tomcat6 \
-        python python3 python-dev py-pip \
+        python python-dev py-pip \
         python-argparse python-yaml python-pip python-wheel \
         mysql-connector-python \
         gcc \
