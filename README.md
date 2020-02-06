@@ -44,6 +44,7 @@ List of available packages inside the container:
 - maven 3.5
 - tomcat
 - python
+- python3
 - locate
 - which
 
