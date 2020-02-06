@@ -33,13 +33,6 @@ defaults: &defaults
 
 version: 2
 jobs:
-  centos6:
-    <<: *defaults
-    environment:
-      IMAGE: khos2ow/cloudstack-rpm-builder
-      TAG: centos6
-      PARAMS: --distribution centos63
-
   centos7:
     <<: *defaults
     environment:
@@ -58,11 +51,6 @@ workflows:
   version: 2
   build:
     jobs:
-    - centos6:
-        filters:
-          tags:
-            only: /v.*/
-
     - centos7:
         filters:
           tags:

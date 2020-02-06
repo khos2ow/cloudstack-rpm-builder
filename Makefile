@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-.PHONY: all centos6 centos7 latest
+.PHONY: all centos7 latest
 
 # Build docker tag based on provided info
 #
@@ -25,10 +25,7 @@ define build_tag
 	docker build -t khos2ow/cloudstack-rpm-builder:$(1) $(2)
 endef
 
-all: centos6 centos7 latest
-
-centos6:
-	$(call build_tag,centos6,centos6)
+all: centos7 latest
 
 centos7:
 	$(call build_tag,centos7,centos7)

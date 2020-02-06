@@ -29,7 +29,6 @@ This will give portable, immutable and reproducable mechanism to build packages 
 ## Supported tags and respective `Dockerfile` links
 
 - [`latest`, `centos7` (centos7/Dockerfile)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile)
-- [`centos6` (centos6/Dockerfile)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos6/Dockerfile)
 
 ## Packges installed in conatiner
 
@@ -57,7 +56,7 @@ Let's assume we want to build packages for CentOS 7 on CentOS 7. We pull that im
 
     docker pull khos2ow/cloudstack-rpm-builder:centos7
 
-You can replace `centos7` tag by `centos6` or `latest` if you want.
+You can replace `centos7` tag by `latest` if you want.
 
 ### Build local repository
 
