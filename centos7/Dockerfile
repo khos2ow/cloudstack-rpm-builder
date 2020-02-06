@@ -34,10 +34,8 @@ RUN \
         git \
         java-1.8.0-openjdk-devel \
         tomcat \
-        python-argparse \
-        python-yaml \
-        python-pip \
-        python-wheel \
+        python python3 python-dev py-pip \
+        python-argparse python-yaml python-pip python-wheel \
         mysql-connector-python \
         gcc \
         gcc-c++ \
@@ -45,6 +43,7 @@ RUN \
         wget \
         ws-commons-util && \
     yum upgrade python-setuptools && \
+    pip install --upgrade pip && \
     wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo && \
     yum clean metadata && \
     yum install -y \

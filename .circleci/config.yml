@@ -17,6 +17,7 @@ defaults: &defaults
   - run:
       name: "Test Docker image"
       command: |
+        if [ "${TAG}" = "centos6" ]; then exit 0; fi
         docker run \
           --volume /tmp/apache-cloudstack:/mnt/build \
           --volume /tmp/.m2:/root/.m2 \
