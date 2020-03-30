@@ -29,8 +29,9 @@ project.
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`latest`, `latest-jdk8`, `centos7`, `centos7-jdk8`(centos7/Dockerfile.jdk8)][centos7-dockerfile]
-- [`latest-jdk11`, `centos7-jdk11` (centos7/Dockerfile.jdk11)][latest-jdk11-dockerfile]
+- [`latest`, `centos8` (centos8/Dockerfile)][centos8-dockerfile]
+- [`centos7`, `centos7-jdk8`(centos7/Dockerfile.jdk8)][centos7-jdk8-dockerfile]
+- [`centos7-jdk11` (centos7/Dockerfile.jdk11)][centos7-jdk11-dockerfile]
 - [`centos6` (centos6/Dockerfile)][centos6-dockerfile] [EOL - not supported anymore]
 
 ## Packages installed in container
@@ -62,10 +63,10 @@ Let's assume we want to build packages for CentOS 7 on CentOS 7. We pull that
 image first:
 
 ```bash
-docker pull khos2ow/cloudstack-rpm-builder:centos7-jdk11
+docker pull khos2ow/cloudstack-rpm-builder:centos8
 ```
 
-You can replace `centos7-jdk11` tag by [one of the other tags].
+You can replace `centos8` tag by [one of the other tags].
 
 ### Build local repository
 
@@ -92,7 +93,7 @@ always expects the `cloudstack` code exists in `/mnt/build` path.)
 ```bash
 docker run \
     -v /tmp:/mnt/build \
-    khos2ow/cloudstack-rpm-builder:centos7-jdk11 --distribution centos7 [ARGS...]
+    khos2ow/cloudstack-rpm-builder:centos8 --distribution centos7 [ARGS...]
 ```
 
 Or if your local cloudstack folder has other name, you need to map it to
@@ -101,7 +102,7 @@ Or if your local cloudstack folder has other name, you need to map it to
 ```bash
 docker run \
     -v /tmp/cloudstack-custom-name:/mnt/build/cloudstack \
-    khos2ow/cloudstack-rpm-builder:centos7-jdk11 --distribution centos7 [ARGS...]
+    khos2ow/cloudstack-rpm-builder:centos8 --distribution centos7 [ARGS...]
 ```
 
 After the build has finished the `.rpm` packages are available in
@@ -125,10 +126,10 @@ flag) in `/mnt/build/cloudstack` inside the container and can be accessed from
 ```bash
 docker run \
     -v /tmp:/mnt/build \
-    khos2ow/cloudstack-rpm-builder:centos7-jdk11 \
+    khos2ow/cloudstack-rpm-builder:centos8 \
         --git-remote https://github.com/apache/cloudstack.git \
         --git-ref master \
-        --distribution centos7 [ARGS...]
+        --distribution centos8 [ARGS...]
 ```
 
 Note that any valid git Refspec is acceptable, such as:
@@ -155,7 +156,7 @@ it run faster.
 docker run \
     -v /tmp:/mnt/build \
     -v ~/.m2:/root/.m2 \
-    khos2ow/cloudstack-rpm-builder:centos7-jdk11 --distribution centos7 [ARGS...]
+    khos2ow/cloudstack-rpm-builder:centos8 --distribution centos7 [ARGS...]
 ```
 
 ### Adjust host owner permission
@@ -175,7 +176,7 @@ docker run \
     -v /tmp:/mnt/build \
     -e "USER_ID=$(id -u)" \
     -e "USER_GID=$(id -g)" \
-    khos2ow/cloudstack-rpm-builder:centos7-jdk11 --distribution centos7 [ARGS...]
+    khos2ow/cloudstack-rpm-builder:centos8 --distribution centos7 [ARGS...]
 ```
 
 ## Builder help
@@ -185,7 +186,7 @@ To see all the available options you can pass to `docker run ...` command:
 ```bash
 docker run \
     -v /tmp:/mnt/build \
-    khos2ow/cloudstack-rpm-builder:centos7-jdk11 --help
+    khos2ow/cloudstack-rpm-builder:centos8 --help
 ```
 
 ## License
@@ -193,8 +194,9 @@ docker run \
 Licensed under [Apache License version 2.0]. Please see the [LICENSE] file
 included in the root directory of the source tree for extended license details.
 
-[centos7-dockerfile]: https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk8
-[latest-jdk11-dockerfile]: https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk11
+[centos8-dockerfile]: https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos8/Dockerfile
+[centos7-jdk8-dockerfile]: https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk8
+[centos7-jdk11-dockerfile]: https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk11
 [centos6-dockerfile]: https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos6/Dockerfile
 [one of the other tags]: #supported-tags-and-respective-dockerfile-links
 [https://github.com/apache/cloudstack]: https://github.com/apache/cloudstack
