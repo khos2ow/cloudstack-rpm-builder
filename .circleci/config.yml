@@ -106,7 +106,7 @@ workflows:
     #     ignore: master
     jobs:
     - test:
-        name:
+        name: test-centos6
         image: khos2ow/cloudstack-rpm-builder
         tag: centos6
         repo: https://github.com/apache/cloudstack.git
