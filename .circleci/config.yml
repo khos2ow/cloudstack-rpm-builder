@@ -52,7 +52,9 @@ jobs:
     - setup_remote_docker
     - run:
         name: Push docker image
-        command: echo "DOCKER_TAG=<<parameters.tag>> make <<parameters.tag>> push"
+        command: |
+          echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+          DOCKER_TAG=<<parameters.tag>> make <<parameters.tag>> push
 
 workflows:
   version: 2
@@ -85,6 +87,8 @@ workflows:
           branches:
             ignore: master
 
+  build:
+    jobs:
     - push:
         name: push-centos6
         tag: centos6
@@ -106,24 +110,3 @@ workflows:
         filters:
           branches:
             only: master
-
-  # release:
-  #   jobs:
-  #   - centos6:
-  #       filters:
-  #         branches:
-  #           only: master
-  #           ignore: /.*/
-
-  #   - centos7:
-  #       filters:
-  #         branches:
-  #           only: master
-  #           ignore: /.*/
-
-  #   - latest:
-  #       filters:
-  #         branches:
-  #           only: master
-  #           ignore: /.*/
-
