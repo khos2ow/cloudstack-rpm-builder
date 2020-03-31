@@ -1,39 +1,36 @@
-# defaults: &defaults
-#   machine:
-#     services:
-#       - docker
-#   steps:
-#   - checkout
-#   - run:
-#       name: "Setup required directories"
-#       command: |
-#         mkdir -p /tmp/apache-cloudstack
-#         mkdir -p /tmp/.m2
-#   - restore_cache:
-#       key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
-#   - run:
-#       name: "Build Docker image"
-#       command: make ${TAG}
-#   - run:
-#       name: "Test Docker image"
-#       command: |
-#         docker run \
-#           --volume /tmp/apache-cloudstack:/mnt/build \
-#           --volume /tmp/.m2:/root/.m2 \
-#           --rm \
-#           ${IMAGE}:${TAG} \
-#             --git-remote ${BUILD_REPO} \
-#             --git-ref ${BUILD_REF} \
-#             --remove-first \
-#             ${BUILD_PARAMS}
-#   - save_cache:
-#       key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
-#       paths:
-#         - /tmp/.m2
-
 version: 2.1
 
 jobs:
+  centos6:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+    - checkout
+    - setup_remote_docker
+    - run:
+        name: "Build Docker image"
+        command: make centos6
+
+  centos7:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+    - checkout
+    - setup_remote_docker
+    - run:
+        name: "Build Docker image"
+        command: make centos7
+
+  latest:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+    - checkout
+    - setup_remote_docker
+    - run:
+        name: "Build Docker image"
+        command: make latest
+
   test:
     parameters:
       tag:
@@ -46,6 +43,14 @@ jobs:
       - image: circleci/buildpack-deps:stretch
     steps:
     - checkout
+    - setup_remote_docker
+    - run:
+        name: "Setup required directories"
+        command: |
+          mkdir -p /tmp/apache-cloudstack
+          mkdir -p /tmp/.m2
+    - restore_cache:
+        key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
     - run:
         name: "Test Docker image"
         command: |
@@ -58,41 +63,16 @@ jobs:
               --git-ref <<parameters.ref>> \
               --remove-first \
               <<parameters.param>>
-
-  centos6:
-    # <<: *defaults
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    steps:
-    - checkout
-    - run:
-        name: "Build Docker image"
-        command: make ${TAG}
-    environment:
-      TAG: centos6
-
-  # centos7:
-  #   <<: *defaults
-  #   environment:
-  #     IMAGE: khos2ow/cloudstack-rpm-builder
-  #     TAG: centos7
-  #     BUILD_REPO: https://github.com/apache/cloudstack.git
-  #     BUILD_REF: refs/heads/4.13
-  #     BUILD_PARAMS: --distribution centos7
-
-  # latest:
-  #   <<: *defaults
-  #   environment:
-  #     IMAGE: khos2ow/cloudstack-rpm-builder
-  #     TAG: centos7
-  #     BUILD_REPO: https://github.com/apache/cloudstack.git
-  #     BUILD_REF: refs/heads/4.13
-  #     BUILD_PARAMS: --distribution centos7
+    - save_cache:
+        key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
+        paths:
+          - /tmp/.m2
 
 workflows:
   version: 2
   build:
     jobs:
+    - centos6
     - test:
         name: test-centos6
         tag: centos6
@@ -101,15 +81,23 @@ workflows:
         requires:
         - centos6
 
-    - centos6:
-        filters:
-          branches:
-            ignore: master
+    - centos7
+    - test:
+        name: test-centos7
+        tag: centos7
+        ref: refs/heads/4.13
+        param: --distribution centos7
+        requires:
+        - centos7
 
-    # - centos7:
-    #     filters:
-    #       branches:
-    #         ignore: master
+    - latest
+    - test:
+        name: test-latest
+        tag: centos7
+        ref: refs/heads/4.13
+        param: --distribution centos7
+        requires:
+        - latest
 
   # release:
   #   jobs:
