@@ -17,16 +17,15 @@ defaults: &defaults
   - run:
       name: "Test Docker image"
       command: |
-        if [ "${TAG}" = "centos6" ]; then exit 0; fi
         docker run \
           --volume /tmp/apache-cloudstack:/mnt/build \
           --volume /tmp/.m2:/root/.m2 \
           --rm \
           ${IMAGE}:${TAG} \
-            --git-remote https://github.com/apache/cloudstack.git \
-            --git-ref refs/heads/master \
+            --git-remote ${BUILD_REPO} \
+            --git-ref ${BUILD_REF} \
             --remove-first \
-            ${PARAMS}
+            ${BUILD_PARAMS}
   - save_cache:
       key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
       paths:
@@ -39,37 +38,32 @@ jobs:
     environment:
       IMAGE: khos2ow/cloudstack-rpm-builder
       TAG: centos6
-      PARAMS: --distribution centos63
+      BUILD_REPO: https://github.com/apache/cloudstack.git
+      BUILD_REF: refs/heads/4.13
+      BUILD_PARAMS: --distribution centos63
 
   centos7:
     <<: *defaults
     environment:
       IMAGE: khos2ow/cloudstack-rpm-builder
       TAG: centos7
-      PARAMS: --distribution centos7
+      BUILD_REPO: https://github.com/apache/cloudstack.git
+      BUILD_REF: refs/heads/master
+      BUILD_PARAMS: --distribution centos7
 
   latest:
     <<: *defaults
     environment:
       IMAGE: khos2ow/cloudstack-rpm-builder
       TAG: centos7
-      PARAMS: --distribution centos7
+      BUILD_REPO: https://github.com/apache/cloudstack.git
+      BUILD_REF: refs/heads/master
+      BUILD_PARAMS: --distribution centos7
 
 workflows:
   version: 2
   build:
     jobs:
-    - centos6:
-        filters:
-          tags:
-            only: /v.*/
-
-    - centos7:
-        filters:
-          tags:
-            only: /v.*/
-
-    - latest:
-        filters:
-          tags:
-            only: /v.*/
+    - centos6
+    - centos7
+    - latest
