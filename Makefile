@@ -15,23 +15,27 @@
 # specific language governing permissions and limitations
 # under the License.
 
-.PHONY: all centos6 centos7 latest
+DOCKER_IMAGE := khos2ow/cloudstack-rpm-builder
+DOCKER_TAG   := 
 
-# Build docker tag based on provided info
-#
-# $1: tag_name
-# $2: directory_name
-define build_tag
-	docker build -t khos2ow/cloudstack-rpm-builder:$(1) $(2)
-endef
-
+.PHONY: all
 all: centos6 centos7 latest
 
+.PHONY: centos6
+centos6: DOCKER_TAG := centos6
 centos6:
-	$(call build_tag,centos6,centos6)
+	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos6/Dockerfile centos6/
 
+.PHONY: centos7
+centos7: DOCKER_TAG := centos7
 centos7:
-	$(call build_tag,centos7,centos7)
+	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos7/Dockerfile centos7/
 
+.PHONY: latest
+latest: DOCKER_TAG := latest
 latest:
-	$(call build_tag,latest,centos7)
+	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos7/Dockerfile centos7/
+
+.PHONY: push
+push:
+	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
