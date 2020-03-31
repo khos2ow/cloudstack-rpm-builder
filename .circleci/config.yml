@@ -56,7 +56,7 @@ jobs:
 
 workflows:
   version: 2
-  build:
+  test:
     jobs:
     - test:
         name: test-centos6
@@ -90,21 +90,22 @@ workflows:
         tag: centos6
         filters:
           branches:
-            ignore: master
+            only: master
 
     - push:
         name: push-centos7
         tag: centos7
         filters:
           branches:
-            ignore: master
+            only: master
+            ignore: /.*/
 
     - push:
         name: push-latest
         tag: latest
         filters:
           branches:
-            ignore: master
+            only: master
 
   # release:
   #   jobs:
