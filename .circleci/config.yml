@@ -34,7 +34,17 @@
 version: 2
 jobs:
   test:
-    # <<: *defaults
+    parameters:
+      image:
+        type: string
+      tag:
+        type: string
+      repo:
+        type: string
+      ref:
+        type: string
+      param:
+        type: string
     machine:
       services:
         - docker
@@ -47,17 +57,11 @@ jobs:
             --volume /tmp/apache-cloudstack:/mnt/build \
             --volume /tmp/.m2:/root/.m2 \
             --rm \
-            ${IMAGE}:${TAG}-PR \
-              --git-remote ${BUILD_REPO} \
-              --git-ref ${BUILD_REF} \
+            <<parameters.image>>:<<parameters.tag>> \
+              --git-remote <<parameters.repo>> \
+              --git-ref <<parameters.ref>> \
               --remove-first \
-              ${BUILD_PARAMS}
-    environment:
-      IMAGE: khos2ow/cloudstack-rpm-builder
-      TAG: centos6
-      BUILD_REPO: https://github.com/apache/cloudstack.git
-      BUILD_REF: refs/heads/4.13
-      BUILD_PARAMS: --distribution centos63
+              <<parameters.param>>
 
   centos6:
     # <<: *defaults
@@ -68,13 +72,13 @@ jobs:
     - checkout
     - run:
         name: "Build Docker image"
-        command: make "${TAG}-PR"
+        command: make ${TAG}
     environment:
-      IMAGE: khos2ow/cloudstack-rpm-builder
+      # IMAGE: khos2ow/cloudstack-rpm-builder
       TAG: centos6
-      BUILD_REPO: https://github.com/apache/cloudstack.git
-      BUILD_REF: refs/heads/4.13
-      BUILD_PARAMS: --distribution centos63
+      # BUILD_REPO: https://github.com/apache/cloudstack.git
+      # BUILD_REF: refs/heads/4.13
+      # BUILD_PARAMS: --distribution centos63
 
   # centos7:
   #   <<: *defaults
@@ -101,8 +105,15 @@ workflows:
     #   - branches:
     #     ignore: master
     jobs:
-    - centos6
-    - test
+    - test:
+        name:
+        image: khos2ow/cloudstack-rpm-builder
+        tag: centos6
+        repo: https://github.com/apache/cloudstack.git
+        ref: refs/heads/4.13
+        param: --distribution centos63
+        requires:
+        - centos6
 
     # - centos7:
     #     filters:
