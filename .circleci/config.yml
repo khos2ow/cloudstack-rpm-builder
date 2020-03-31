@@ -1,40 +1,57 @@
-defaults: &defaults
-  machine:
-    services:
-      - docker
-  steps:
-  - checkout
-  - run:
-      name: "Setup required directories"
-      command: |
-        mkdir -p /tmp/apache-cloudstack
-        mkdir -p /tmp/.m2
-  - restore_cache:
-      key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
-  - run:
-      name: "Build Docker image"
-      command: make ${TAG}
-  - run:
-      name: "Test Docker image"
-      command: |
-        docker run \
-          --volume /tmp/apache-cloudstack:/mnt/build \
-          --volume /tmp/.m2:/root/.m2 \
-          --rm \
-          ${IMAGE}:${TAG} \
-            --git-remote ${BUILD_REPO} \
-            --git-ref ${BUILD_REF} \
-            --remove-first \
-            ${BUILD_PARAMS}
-  - save_cache:
-      key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
-      paths:
-        - /tmp/.m2
+# defaults: &defaults
+#   machine:
+#     services:
+#       - docker
+#   steps:
+#   - checkout
+#   - run:
+#       name: "Setup required directories"
+#       command: |
+#         mkdir -p /tmp/apache-cloudstack
+#         mkdir -p /tmp/.m2
+#   - restore_cache:
+#       key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
+#   - run:
+#       name: "Build Docker image"
+#       command: make ${TAG}
+#   - run:
+#       name: "Test Docker image"
+#       command: |
+#         docker run \
+#           --volume /tmp/apache-cloudstack:/mnt/build \
+#           --volume /tmp/.m2:/root/.m2 \
+#           --rm \
+#           ${IMAGE}:${TAG} \
+#             --git-remote ${BUILD_REPO} \
+#             --git-ref ${BUILD_REF} \
+#             --remove-first \
+#             ${BUILD_PARAMS}
+#   - save_cache:
+#       key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
+#       paths:
+#         - /tmp/.m2
 
 version: 2
 jobs:
-  centos6:
-    <<: *defaults
+  test:
+    # <<: *defaults
+    machine:
+      services:
+        - docker
+    steps:
+    - checkout
+    - run:
+        name: "Test Docker image"
+        command: |
+          docker run \
+            --volume /tmp/apache-cloudstack:/mnt/build \
+            --volume /tmp/.m2:/root/.m2 \
+            --rm \
+            ${IMAGE}:${TAG}-PR \
+              --git-remote ${BUILD_REPO} \
+              --git-ref ${BUILD_REF} \
+              --remove-first \
+              ${BUILD_PARAMS}
     environment:
       IMAGE: khos2ow/cloudstack-rpm-builder
       TAG: centos6
@@ -42,28 +59,73 @@ jobs:
       BUILD_REF: refs/heads/4.13
       BUILD_PARAMS: --distribution centos63
 
-  centos7:
-    <<: *defaults
+  centos6:
+    # <<: *defaults
+    machine:
+      services:
+        - docker
+    steps:
+    - checkout
+    - run:
+        name: "Build Docker image"
+        command: make "${TAG}-PR"
     environment:
       IMAGE: khos2ow/cloudstack-rpm-builder
-      TAG: centos7
+      TAG: centos6
       BUILD_REPO: https://github.com/apache/cloudstack.git
-      BUILD_REF: refs/heads/master
-      BUILD_PARAMS: --distribution centos7
+      BUILD_REF: refs/heads/4.13
+      BUILD_PARAMS: --distribution centos63
 
-  latest:
-    <<: *defaults
-    environment:
-      IMAGE: khos2ow/cloudstack-rpm-builder
-      TAG: centos7
-      BUILD_REPO: https://github.com/apache/cloudstack.git
-      BUILD_REF: refs/heads/master
-      BUILD_PARAMS: --distribution centos7
+  # centos7:
+  #   <<: *defaults
+  #   environment:
+  #     IMAGE: khos2ow/cloudstack-rpm-builder
+  #     TAG: centos7
+  #     BUILD_REPO: https://github.com/apache/cloudstack.git
+  #     BUILD_REF: refs/heads/4.13
+  #     BUILD_PARAMS: --distribution centos7
+
+  # latest:
+  #   <<: *defaults
+  #   environment:
+  #     IMAGE: khos2ow/cloudstack-rpm-builder
+  #     TAG: centos7
+  #     BUILD_REPO: https://github.com/apache/cloudstack.git
+  #     BUILD_REF: refs/heads/4.13
+  #     BUILD_PARAMS: --distribution centos7
 
 workflows:
   version: 2
   build:
+    # triggers:
+    #   - branches:
+    #     ignore: master
     jobs:
     - centos6
-    - centos7
-    - latest
+    - test
+
+    # - centos7:
+    #     filters:
+    #       branches:
+    #         ignore: master
+
+  release:
+    jobs:
+    - centos6:
+        filters:
+          branches:
+            only: master
+            ignore: /.*/
+
+    - centos7:
+        filters:
+          branches:
+            only: master
+            ignore: /.*/
+
+    - latest:
+        filters:
+          branches:
+            only: master
+            ignore: /.*/
+
