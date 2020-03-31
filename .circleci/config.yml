@@ -36,11 +36,7 @@ version: 2.1
 jobs:
   test:
     parameters:
-      image:
-        type: string
       tag:
-        type: string
-      repo:
         type: string
       ref:
         type: string
@@ -57,8 +53,8 @@ jobs:
             --volume /tmp/apache-cloudstack:/mnt/build \
             --volume /tmp/.m2:/root/.m2 \
             --rm \
-            <<parameters.image>>:<<parameters.tag>> \
-              --git-remote <<parameters.repo>> \
+            khos2ow/cloudstack-rpm-builder:<<parameters.tag>> \
+              --git-remote https://github.com/apache/cloudstack.git \
               --git-ref <<parameters.ref>> \
               --remove-first \
               <<parameters.param>>
@@ -73,11 +69,7 @@ jobs:
         name: "Build Docker image"
         command: make ${TAG}
     environment:
-      # IMAGE: khos2ow/cloudstack-rpm-builder
       TAG: centos6
-      # BUILD_REPO: https://github.com/apache/cloudstack.git
-      # BUILD_REF: refs/heads/4.13
-      # BUILD_PARAMS: --distribution centos63
 
   # centos7:
   #   <<: *defaults
@@ -100,19 +92,19 @@ jobs:
 workflows:
   version: 2
   build:
-    # triggers:
-    #   - branches:
-    #     ignore: master
     jobs:
     - test:
         name: test-centos6
-        image: khos2ow/cloudstack-rpm-builder
         tag: centos6
-        repo: https://github.com/apache/cloudstack.git
         ref: refs/heads/4.13
         param: --distribution centos63
         requires:
         - centos6
+
+    - centos6:
+        filters:
+          branches:
+            ignore: master
 
     # - centos7:
     #     filters:
