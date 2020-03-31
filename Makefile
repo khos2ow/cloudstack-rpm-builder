@@ -16,23 +16,23 @@
 # under the License.
 
 DOCKER_IMAGE := khos2ow/cloudstack-rpm-builder
-DOCKER_TAG   := 
+DOCKER_TAG   ?= 
 
 .PHONY: all
 all: centos6 centos7 latest
 
 .PHONY: centos6
-centos6: DOCKER_TAG := centos6
+centos6: DOCKER_TAG ?= centos6
 centos6:
 	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos6/Dockerfile centos6/
 
 .PHONY: centos7
-centos7: DOCKER_TAG := centos7
+centos7: DOCKER_TAG ?= centos7
 centos7:
 	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos7/Dockerfile centos7/
 
 .PHONY: latest
-latest: DOCKER_TAG := latest
+latest: DOCKER_TAG ?= latest
 latest:
 	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos7/Dockerfile centos7/
 
