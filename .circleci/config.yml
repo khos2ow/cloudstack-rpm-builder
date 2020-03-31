@@ -1,36 +1,6 @@
 version: 2.1
 
 jobs:
-  centos6:
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    steps:
-    - checkout
-    - setup_remote_docker
-    - run:
-        name: "Build Docker image"
-        command: make centos6
-
-  centos7:
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    steps:
-    - checkout
-    - setup_remote_docker
-    - run:
-        name: "Build Docker image"
-        command: make centos7
-
-  latest:
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    steps:
-    - checkout
-    - setup_remote_docker
-    - run:
-        name: "Build Docker image"
-        command: make latest
-
   test:
     parameters:
       tag:
@@ -52,6 +22,9 @@ jobs:
     - restore_cache:
         key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
     - run:
+        name: "Build Docker image"
+        command: make <<parameters.tag>>
+    - run:
         name: "Test Docker image"
         command: |
           docker run \
@@ -68,36 +41,70 @@ jobs:
         paths:
           - /tmp/.m2
 
+  push:
+    parameters:
+      tag:
+        type: string
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+    - checkout
+    - setup_remote_docker
+    - run:
+        name: Push docker image
+        command: echo "DOCKER_TAG=<<parameters.tag>> make <<parameters.tag>> push"
+
 workflows:
   version: 2
   build:
     jobs:
-    - centos6
     - test:
         name: test-centos6
         tag: centos6
         ref: refs/heads/4.13
         param: --distribution centos63
-        requires:
-        - centos6
+        filters:
+          branches:
+            ignore: master
 
-    - centos7
     - test:
         name: test-centos7
         tag: centos7
         ref: refs/heads/4.13
         param: --distribution centos7
-        requires:
-        - centos7
+        filters:
+          branches:
+            ignore: master
 
-    - latest
     - test:
         name: test-latest
         tag: centos7
         ref: refs/heads/4.13
         param: --distribution centos7
-        requires:
-        - latest
+        filters:
+          branches:
+            ignore: master
+
+    - push:
+        name: push-centos6
+        tag: centos6
+        filters:
+          branches:
+            ignore: master
+
+    - push:
+        name: push-centos7
+        tag: centos7
+        filters:
+          branches:
+            ignore: master
+
+    - push:
+        name: push-latest
+        tag: latest
+        filters:
+          branches:
+            ignore: master
 
   # release:
   #   jobs:
