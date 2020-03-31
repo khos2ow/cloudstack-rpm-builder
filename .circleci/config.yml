@@ -46,9 +46,8 @@ jobs:
         type: string
       param:
         type: string
-    machine:
-      services:
-        - docker
+    docker:
+      - image: circleci/buildpack-deps:stretch
     steps:
     - checkout
     - run:
@@ -66,9 +65,8 @@ jobs:
 
   centos6:
     # <<: *defaults
-    machine:
-      services:
-        - docker
+    docker:
+      - image: circleci/buildpack-deps:stretch
     steps:
     - checkout
     - run:
