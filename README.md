@@ -9,7 +9,7 @@ This will give portable, immutable and reproducable mechanism to build packages 
 ## Table of Contents
 
 - [Supported tags and respective `Dockerfile` links](#supported-tags-and-respective-dockerfile-links)
-- [Packges installed in conatiner](#packges-installed-in-conatiner)
+- [Packages installed in container](#packages-installed-in-container)
 - [Build RPM packages](#build-rpm-packages)
   - [Pull Docker images](#pull-docker-images)
   - [Build local repository](#build-local-repository)
@@ -29,7 +29,7 @@ This will give portable, immutable and reproducable mechanism to build packages 
 - [`latest-jdk11`, `centos7-jdk11`  (centos7/Dockerfile.jdk11)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk11)
 - [`centos6` (centos6/Dockerfile)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos6/Dockerfile)
 
-## Packges installed in container
+## Packages installed in container
 
 List of available packages inside the container:
 
