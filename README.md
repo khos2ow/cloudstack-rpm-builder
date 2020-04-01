@@ -28,10 +28,11 @@ This will give portable, immutable and reproducable mechanism to build packages 
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`latest`, `centos7` (centos7/Dockerfile)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile)
+- [`latest`, `latest-jdk8`, `centos7`, `centos7-jdk8`  (centos7/Dockerfile.jdk8)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk8)
+- [`latest-jdk11`, `centos7-jdk11`  (centos7/Dockerfile.jdk11)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk11)
 - [`centos6` (centos6/Dockerfile)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos6/Dockerfile)
 
-## Packges installed in conatiner
+## Packges installed in container
 
 List of available packages inside the container:
 
@@ -40,7 +41,7 @@ List of available packages inside the container:
 - createrepo
 - mkisofs
 - git
-- java 1.8
+- java (JDK 8 or JDK 11)
 - maven 3.5
 - tomcat
 - python
@@ -56,9 +57,9 @@ Building RPM packages with the Docker container is rather easy, a few steps are 
 
 Let's assume we want to build packages for CentOS 7 on CentOS 7. We pull that image first:
 
-    docker pull khos2ow/cloudstack-rpm-builder:centos7
+    docker pull khos2ow/cloudstack-rpm-builder:centos7-jdk11
 
-You can replace `centos7` tag by `centos6` or `latest` if you want.
+You can replace `centos7-jdk11` tag by [one of the other tags](#supported-tags-and-respective-dockerfile-links).
 
 ### Build local repository
 
@@ -78,13 +79,13 @@ Now that we have cloned the CloudStack source code locally, we can build package
 
     docker run \
         -v /tmp:/mnt/build \
-        khos2ow/cloudstack-rpm-builder:centos7 --distribution centos7 [ARGS...]
+        khos2ow/cloudstack-rpm-builder:centos7-jdk11 --distribution centos7 [ARGS...]
 
 Or if your local cloudstack folder has other name, you need to map it to `/mnt/build/cloudstack`.
 
     docker run \
         -v /tmp/cloudstack-custom-name:/mnt/build/cloudstack \
-        khos2ow/cloudstack-rpm-builder:centos7 --distribution centos7 [ARGS...]
+        khos2ow/cloudstack-rpm-builder:centos7-jdk11 --distribution centos7 [ARGS...]
 
 After the build has finished the *.rpm* packages are available in */tmp/cloudstack/dist/rpmbuild/RPMS* on the host system.
 
@@ -98,7 +99,7 @@ Now let's assume we want to build packages of `HEAD` of `master` branch from htt
 
     docker run \
         -v /tmp:/mnt/build \
-        khos2ow/cloudstack-rpm-builder:centos7 \
+        khos2ow/cloudstack-rpm-builder:centos7-jdk11 \
             --git-remote https://github.com/apache/cloudstack.git \
             --git-ref master \
             --distribution centos7 [ARGS...]
@@ -124,7 +125,7 @@ You can provide Maven cache folder (`~/.m2`) as a volume to the container to mak
     docker run \
         -v /tmp:/mnt/build \
         -v ~/.m2:/root/.m2 \
-        khos2ow/cloudstack-rpm-builder:centos7 --distribution centos7 [ARGS...]
+        khos2ow/cloudstack-rpm-builder:centos7-jdk11 --distribution centos7 [ARGS...]
 
 ### Adjust host owner permission
 
@@ -136,7 +137,7 @@ This is specially useful if you want to use this image in Jenkins job and want t
         -v /tmp:/mnt/build \
         -e "USER_ID=$(id -u)" \
         -e "USER_GID=$(id -g)" \
-        khos2ow/cloudstack-rpm-builder:centos7 --distribution centos7 [ARGS...]
+        khos2ow/cloudstack-rpm-builder:centos7-jdk11 --distribution centos7 [ARGS...]
 
 ## Builder help
 
@@ -144,7 +145,7 @@ To see all the available options you can pass to `docker run ...` command:
 
     docker run \
         -v /tmp:/mnt/build \
-        khos2ow/cloudstack-rpm-builder:centos7 --help
+        khos2ow/cloudstack-rpm-builder:centos7-jdk11 --help
 
 ## License
 

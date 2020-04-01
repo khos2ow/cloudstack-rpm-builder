@@ -87,11 +87,50 @@ workflows:
           branches:
             ignore: master
 
+    - test:
+        name: test-centos7-jdk11
+        tag: centos7
+        ref: refs/heads/4.14
+        param: --distribution centos7
+        filters:
+          branches:
+            ignore: master
+
   build:
     jobs:
     - push:
         name: push-centos6
         tag: centos6
+        filters:
+          branches:
+            only: master
+
+    - push:
+        name: push-centos7-jdk11
+        tag: centos7-jdk11
+        filters:
+          branches:
+            only: master
+            ignore: /.*/
+
+    - push:
+        name: push-latest-jdk11
+        tag: latest-jdk11
+        filters:
+          branches:
+            only: master
+
+    - push:
+        name: push-centos7-jdk8
+        tag: centos7-jdk8
+        filters:
+          branches:
+            only: master
+            ignore: /.*/
+
+    - push:
+        name: push-latest-jdk8
+        tag: latest-jdk8
         filters:
           branches:
             only: master
