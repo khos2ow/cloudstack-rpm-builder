@@ -1,9 +1,6 @@
 # CloudStack RPM Package builder using Docker
 
-[![CircleCI Build Status](https://circleci.com/gh/khos2ow/cloudstack-rpm-builder.svg?style=svg)](https://circleci.com/gh/khos2ow/cloudstack-rpm-builder)
-[![Docker Automated build](https://img.shields.io/docker/automated/khos2ow/cloudstack-rpm-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-rpm-builder/)
-[![Docker Build Status](https://img.shields.io/docker/build/khos2ow/cloudstack-rpm-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-rpm-builder/builds/)
-[![license](https://img.shields.io/github/license/khos2ow/cloudstack-rpm-builder.svg)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/LICENSE)
+[![CircleCI Build Status](https://circleci.com/gh/khos2ow/cloudstack-rpm-builder.svg?style=svg)](https://circleci.com/gh/khos2ow/cloudstack-rpm-builder) [![Docker Pulls](https://img.shields.io/docker/pulls/khos2ow/cloudstack-rpm-builder.svg)](https://store.docker.com/community/images/khos2ow/cloudstack-rpm-builder) [![Docker Automated build](https://img.shields.io/docker/automated/khos2ow/cloudstack-rpm-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-rpm-builder/) [![Docker Build Status](https://img.shields.io/docker/build/khos2ow/cloudstack-rpm-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-rpm-builder/builds/) [![license](https://img.shields.io/github/license/khos2ow/cloudstack-rpm-builder.svg)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/LICENSE)
 
 Docker images for building Apache CloudStack RPM packages.
 
