@@ -70,17 +70,8 @@ workflows:
             ignore: master
 
     - test:
-        name: test-centos7
-        tag: centos7
-        ref: refs/heads/4.13
-        param: --distribution centos7
-        filters:
-          branches:
-            ignore: master
-
-    - test:
-        name: test-latest
-        tag: centos7
+        name: test-centos7-jdk8
+        tag: centos7-jdk8
         ref: refs/heads/4.13
         param: --distribution centos7
         filters:
@@ -89,8 +80,8 @@ workflows:
 
     - test:
         name: test-centos7-jdk11
-        tag: centos7
-        ref: refs/heads/4.14
+        tag: centos7-jdk11
+        ref: refs/heads/master
         param: --distribution centos7
         filters:
           branches:
