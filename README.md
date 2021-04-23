@@ -1,6 +1,8 @@
 # CloudStack RPM Package builder using Docker
 
-[![CircleCI Build Status](https://circleci.com/gh/khos2ow/cloudstack-rpm-builder.svg?style=svg)](https://circleci.com/gh/khos2ow/cloudstack-rpm-builder) [![Docker Pulls](https://img.shields.io/docker/pulls/khos2ow/cloudstack-rpm-builder.svg)](https://store.docker.com/community/images/khos2ow/cloudstack-rpm-builder) [![Docker Automated build](https://img.shields.io/docker/automated/khos2ow/cloudstack-rpm-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-rpm-builder/) [![Docker Build Status](https://img.shields.io/docker/build/khos2ow/cloudstack-rpm-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-rpm-builder/builds/) [![license](https://img.shields.io/github/license/khos2ow/cloudstack-rpm-builder.svg)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/LICENSE)
+[![Build Status](https://github.com/khos2ow/cloudstack-rpm-builder/workflows/ci/badge.svg)](https://github.com/khos2ow/cloudstack-rpm-builder/actions)
+[![Docker Pulls](https://img.shields.io/docker/pulls/khos2ow/cloudstack-rpm-builder.svg)](https://store.docker.com/community/images/khos2ow/cloudstack-rpm-builder)
+[![license](https://img.shields.io/github/license/khos2ow/cloudstack-rpm-builder.svg)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/LICENSE)
 
 Docker images for building Apache CloudStack RPM packages.
 
@@ -25,9 +27,9 @@ This will give portable, immutable and reproducable mechanism to build packages 
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`latest`, `latest-jdk8`, `centos7`, `centos7-jdk8`  (centos7/Dockerfile.jdk8)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk8)
-- [`latest-jdk11`, `centos7-jdk11`  (centos7/Dockerfile.jdk11)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk11)
-- [`centos6` (centos6/Dockerfile)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos6/Dockerfile)
+- [`latest`, `latest-jdk8`, `centos7`, `centos7-jdk8`(centos7/Dockerfile.jdk8)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk8)
+- [`latest-jdk11`, `centos7-jdk11` (centos7/Dockerfile.jdk11)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos7/Dockerfile.jdk11)
+- [`centos6` (centos6/Dockerfile)](https://github.com/khos2ow/cloudstack-rpm-builder/blob/master/centos6/Dockerfile) [EOL - not supported anymore]
 
 ## Packages installed in container
 

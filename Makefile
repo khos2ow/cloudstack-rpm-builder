@@ -15,47 +15,73 @@
 # specific language governing permissions and limitations
 # under the License.
 
-DOCKER_IMAGE ?= khos2ow/cloudstack-rpm-builder
-DOCKER_TAG   ?= 
+# Project variables
+PROJECT_NAME  := cloudstack-rpm-builder
+PROJECT_OWNER := khos2ow
+DESCRIPTION   := Docker images for building Apache CloudStack RPM packages
+PROJECT_URL   := https://github.com/$(PROJECT_OWNER)/$(PROJECT_NAME)
+LICENSE       := Apache-2.0
+
+# Build docker tag based on provided info
+#
+# $1: tag_name
+# $2: directory_name
+# $3: dockerfile_name
+define build_tag
+	docker build --pull --tag $(PROJECT_OWNER)/$(PROJECT_NAME):$(1) --file $(2)/$(3) $(2)
+endef
 
 .PHONY: all
-all: centos6 centos7-jdk11 latest-jdk11 centos7-jdk8 latest-jdk8 centos7 latest
+all: centos6 centos7 centos7-jdk8 centos7-jdk11 latest latest-jdk8 latest-jdk11
 
 .PHONY: centos6
-centos6: DOCKER_TAG := centos6
-centos6:
-	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos6/Dockerfile centos6/
-
-.PHONY: centos7-jdk11
-centos7-jdk11: DOCKER_TAG := centos7-jdk11
-centos7-jdk11:
-	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos7/Dockerfile.jdk11 centos7/
-
-.PHONY: latest-jdk11
-latest-jdk11: DOCKER_TAG := latest-jdk11
-latest-jdk11:
-	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos7/Dockerfile.jdk11 centos7/
-
-.PHONY: centos7-jdk8
-centos7-jdk8: DOCKER_TAG := centos7-jdk8
-centos7-jdk8:
-	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos7/Dockerfile.jdk8 centos7/
-
-.PHONY: latest-jdk8
-latest-jdk8: DOCKER_TAG := latest-jdk8
-latest-jdk8:
-	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos7/Dockerfile.jdk8 centos7/
+centos6: ## Build centos6 image
+	@ $(MAKE) --no-print-directory log-$@
+	$(call build_tag,centos6,centos6,Dockerfile)
 
 .PHONY: centos7
-centos7: DOCKER_TAG := centos7
-centos7:
-	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos7/Dockerfile.jdk8 centos7/
+centos7: ## Build centos7 image
+	@ $(MAKE) --no-print-directory log-$@
+	$(call build_tag,centos7,centos7,Dockerfile.jdk8)
+
+.PHONY: centos7-jdk8
+centos7-jdk8: ## Build centos7-jdk8 image
+	@ $(MAKE) --no-print-directory log-$@
+	$(call build_tag,centos7-jdk8,centos7,Dockerfile.jdk8)
+
+.PHONY: centos7-jdk11
+centos7-jdk11: ## Build centos7-jdk11 image
+	@ $(MAKE) --no-print-directory log-$@
+	$(call build_tag,centos7-jdk11,centos7,Dockerfile.jdk11)
 
 .PHONY: latest
-latest: DOCKER_TAG := latest
-latest:
-	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) --file centos7/Dockerfile.jdk8 centos7/
+latest: ## Build latest image
+	@ $(MAKE) --no-print-directory log-$@
+	$(call build_tag,latest,centos7,Dockerfile.jdk8)
+
+.PHONY: latest-jdk8
+latest-jdk8: ## Build latest-jdk8 image
+	@ $(MAKE) --no-print-directory log-$@
+	$(call build_tag,latest-jdk8,centos7,Dockerfile.jdk8)
+
+.PHONY: latest-jdk11
+latest-jdk11: ## Build latest-jdk11 image
+	@ $(MAKE) --no-print-directory log-$@
+	$(call build_tag,latest-jdk11,centos7,Dockerfile.jdk11)
 
 .PHONY: push
-push:
-	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
+push: DOCKER_TAG ?=
+push: ## Push image
+	@ $(MAKE) --no-print-directory log-$@
+	docker push $(PROJECT_OWNER)/$(PROJECT_NAME):$(DOCKER_TAG)
+
+########################################################################
+## Self-Documenting Makefile Help                                     ##
+## https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html ##
+########################################################################
+.PHONY: help
+help:
+	@ grep -h -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+log-%:
+	@ grep -h -E '^$*:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m==> %s\033[0m\n", $$2}'
