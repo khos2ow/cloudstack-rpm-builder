@@ -62,4 +62,7 @@ rpmbuild --version
 print_title "genisoimage"
 genisoimage --version
 
+print_title "nodejs"
+node --version
+
 echo ""
