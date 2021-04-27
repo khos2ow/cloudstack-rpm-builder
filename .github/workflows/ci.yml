@@ -85,6 +85,31 @@ jobs:
         if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
         run: DOCKER_TAG=centos7-jdk11 make push
 
+  centos8:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build centos8
+        run: make centos8
+
+      - name: Test centos8
+        if: "!contains(github.ref, 'refs/heads/master')"
+        run: ./scripts/test.sh centos8 refs/heads/4.15 "--distribution centos8"
+
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        with:
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Push centos8
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        run: DOCKER_TAG=centos8 make push
+
   latest:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
@@ -105,45 +130,3 @@ jobs:
       - name: Push latest
         if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
         run: DOCKER_TAG=latest make push
-
-  latest-jdk8:
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Build latest-jdk8
-        run: make latest-jdk8
-
-      - name: Login to Docker
-        uses: docker/login-action@v1
-        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
-        with:
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-
-      - name: Push latest-jdk8
-        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
-        run: DOCKER_TAG=latest-jdk8 make push
-
-  latest-jdk11:
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Build latest-jdk11
-        run: make latest-jdk11
-
-      - name: Login to Docker
-        uses: docker/login-action@v1
-        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
-        with:
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-
-      - name: Push latest-jdk11
-        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
-        run: DOCKER_TAG=latest-jdk11 make push

@@ -32,7 +32,7 @@ define build_tag
 endef
 
 .PHONY: all
-all: centos6 centos7 centos7-jdk8 centos7-jdk11 latest latest-jdk8 latest-jdk11
+all: centos6 centos7 centos7-jdk8 centos7-jdk11 centos8 latest
 
 .PHONY: centos6
 centos6: ## Build centos6 image
@@ -54,20 +54,15 @@ centos7-jdk11: ## Build centos7-jdk11 image
 	@ $(MAKE) --no-print-directory log-$@
 	$(call build_tag,centos7-jdk11,centos7,Dockerfile.jdk11)
 
+.PHONY: centos8
+centos8: ## Build centos8 image
+	@ $(MAKE) --no-print-directory log-$@
+	$(call build_tag,centos8,centos8,Dockerfile)
+
 .PHONY: latest
 latest: ## Build latest image
 	@ $(MAKE) --no-print-directory log-$@
-	$(call build_tag,latest,centos7,Dockerfile.jdk8)
-
-.PHONY: latest-jdk8
-latest-jdk8: ## Build latest-jdk8 image
-	@ $(MAKE) --no-print-directory log-$@
-	$(call build_tag,latest-jdk8,centos7,Dockerfile.jdk8)
-
-.PHONY: latest-jdk11
-latest-jdk11: ## Build latest-jdk11 image
-	@ $(MAKE) --no-print-directory log-$@
-	$(call build_tag,latest-jdk11,centos7,Dockerfile.jdk11)
+	$(call build_tag,latest,centos8,Dockerfile)
 
 .PHONY: push
 push: DOCKER_TAG ?=
