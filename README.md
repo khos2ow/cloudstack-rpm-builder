@@ -45,6 +45,7 @@ List of available packages inside the container:
 - python3
 - locate
 - which
+- nodejs
 
 ## Build RPM packages
 
