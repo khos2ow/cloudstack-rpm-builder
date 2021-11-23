@@ -43,7 +43,7 @@ RUN \
         wget \
         ws-commons-util && \
     yum upgrade python-setuptools && \
-    pip install --upgrade pip && \
+    python3 -m pip install --upgrade pip && \
     wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo && \
     yum clean metadata && \
     yum install -y \
